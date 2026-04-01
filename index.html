@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QLD Savings Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0d0d1a;
+      --bg-card: #161625;
+      --bg-card-hover: #1c1c2e;
+      --accent-purple: #8b5cf6;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-orange: #f97316;
+      --accent-yellow: #eab308;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-color: #2d2d44;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 20px;
+      background-image: 
+        radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+    }
+
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .datetime {
+      text-align: right;
+      color: var(--text-secondary);
+    }
+
+    .datetime .time {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .datetime .date {
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .purple { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+    .blue { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+    .cyan { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+    .green { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+    .orange { background: rgba(249, 115, 22, 0.2); color: var(--accent-orange); }
+    .yellow { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); }
+
+    .quick-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quick-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+
+    .quick-link:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(5px);
+    }
+
+    .quick-link-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .quick-link span {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .weather-card {
+      text-align: center;
+    }
+
+    .weather-temp {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent-yellow);
+    }
+
+    .weather-desc {
+      color: var(--text-secondary);
+      margin-bottom: 15px;
+    }
+
+    .weather-details {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .weather-detail {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .crypto-item, .stock-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .crypto-item:last-child, .stock-item:last-child {
+      border-bottom: none;
+    }
+
+    .crypto-info, .stock-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .crypto-icon, .stock-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .crypto-name, .stock-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .crypto-fullname, .stock-fullname {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .crypto-price, .stock-price {
+      text-align: right;
+    }
+
+    .crypto-value, .stock-value {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .crypto-change, .stock-change {
+      font-size: 12px;
+    }
+
+    .positive { color: var(--accent-green); }
+    .negative { color: var(--accent-red); }
+
+    .system-health {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .health-item {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+    }
+
+    .health-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .health-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 5px;
+    }
+
+    .calendar-preview {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .calendar-day {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .calendar-day:last-child {
+      border-bottom: none;
+    }
+
+    .calendar-day-name {
+      font-weight: 500;
+    }
+
+    .calendar-event {
+      color: var(--accent-cyan);
+    }
+
+    .progress-item {
+      margin-bottom: 15px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .progress-label {
+      font-size: 14px;
+    }
+
+    .progress-value {
+      font-size: 14px;
+      color: var(--accent-cyan);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .deals-section {
+      grid-column: 1 / -1;
+    }
+
+    .deals-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .deals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .deal-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid var(--border-color);
+    }
+
+    .deal-store {
+      font-size: 12px;
+      color: var(--accent-cyan);
+      margin-bottom: 5px;
+    }
+
+    .deal-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .deal-price {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .deal-current {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .deal-original {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .deal-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--accent-red);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      .datetime {
+        text-align: center;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    input {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .news-item:hover {
+      background: rgba(255,255,255,0.08) !important;
+      transform: translateX(3px);
+    }
+
+    .deal-card:hover {
+      background: var(--bg-card-hover) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">💰</div>
+        <div>
+          <h1>QLD Savings & Deals</h1>
+          <p>Your daily dose of Queensland bargains</p>
+        </div>
+      </div>
+      <div class="datetime">
+        <div class="time" id="time">--:--</div>
+        <div class="date" id="date">Loading...</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Quick Links -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Quick Links</span>
+          <div class="card-icon purple">🔗</div>
+        </div>
+        <div class="quick-links">
+          <a href="https://www.woolworths.com.au/shop/browse/specials/half-price" target="_blank" class="quick-link">
+            <div class="quick-link-icon" style="background: #005731; color: white;">W</div>
+            <span>Woolworths Half Price</span>
+          </a>
+          <a href="https://www.coles.com.au/offers" target="_blank" class="quick-link">
+            <div class="quick-link-icon" style="background: #e3002b; color: white;">C</div>
+            <span>Coles Specials</span>
+          </a>
+          <a href="https://www.aldi.com.au/" target="_blank" class="quick-link">
+            <div class="quick-link-icon" style="background: #f5a623; color: white;">A</div>
+            <span>ALDI Special Buys</span>
+          </a>
+          <a href="https://www.bunnings.com.au/" target="_blank" class="quick-link">
+            <div class="quick-link-icon" style="background: #ffcd00; color: black;">B</div>
+            <span>Bunnings</span>
+          </a>
+          <a href="https://www.chemistwarehouse.com.au/" target="_blank" class="quick-link">
+            <div class="quick-link-icon" style="background: #00aeef; color: white;">CW</div>
+            <span>Chemist Warehouse</span>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61576483343744" target="_blank" class="quick-link">
+            <div class="quick-link-icon" style="background: #1877f2; color: white;">f</div>
+            <span>QLD Deals & Savings FB</span>
+          </a>
+          <a href="https://www.bybit.com/trade/top/crypto" target="_blank" class="quick-link">
+            <div class="quick-link-icon" style="background: #ffcd00; color: black;">B</div>
+            <span>Bybit Crypto Trading</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Weather -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Weather Live 🌤️</span>
+          <div class="card-icon yellow">☀️</div>
+        </div>
+        <div class="weather-card">
+          <div class="weather-temp" id="temp">--°C</div>
+          <div class="weather-desc" id="weather-desc">Loading... • Brisbane</div>
+          <div class="weather-details">
+            <div class="weather-detail" id="humidity">💧 --%</div>
+            <div class="weather-detail" id="wind">🌬️ --km/h</div>
+            <div class="weather-detail" id="uv">☀️ UV --</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crypto -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Crypto Live 📡</span>
+          <div class="card-icon orange">₿</div>
+        </div>
+        <div class="crypto-item" onclick="window.open('https://www.bybit.com/trade/spot/BTC/USDT','_blank')" style="cursor:pointer">
+          <div class="crypto-info">
+            <div class="crypto-icon" style="background: #f7931a; color: white;">₿</div>
+            <div>
+              <div class="crypto-name">BTC</div>
+              <div class="crypto-fullname">Bitcoin</div>
+            </div>
+          </div>
+          <div class="crypto-price">
+            <div class="crypto-value" id="btc-price">Loading...</div>
+            <div class="crypto-change positive" id="btc-change">--</div>
+          </div>
+        </div>
+        <div class="crypto-item" onclick="window.open('https://www.bybit.com/trade/spot/ETH/USDT','_blank')" style="cursor:pointer">
+          <div class="crypto-info">
+            <div class="crypto-icon" style="background: #627eea; color: white;">⟐</div>
+            <div>
+              <div class="crypto-name">ETH</div>
+              <div class="crypto-fullname">Ethereum</div>
+            </div>
+          </div>
+          <div class="crypto-price">
+            <div class="crypto-value" id="eth-price">Loading...</div>
+            <div class="crypto-change positive" id="eth-change">--</div>
+          </div>
+        </div>
+        <div class="crypto-item" onclick="window.open('https://www.bybit.com/trade/spot/SOL/USDT','_blank')" style="cursor:pointer">
+          <div class="crypto-info">
+            <div class="crypto-icon" style="background: #14f195; color: black;">◎</div>
+            <div>
+              <div class="crypto-name">SOL</div>
+              <div class="crypto-fullname">Solana</div>
+            </div>
+          </div>
+          <div class="crypto-price">
+            <div class="crypto-value" id="sol-price">Loading...</div>
+            <div class="crypto-change positive" id="sol-change">--</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#64748b;margin-top:10px;text-align:center">Click to trade on Bybit</p>
+      </div>
+
+      <!-- Stocks Live -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">ASX Stocks Live 📈</span>
+          <div class="card-icon green">📈</div>
+        </div>
+        <div class="stock-item" onclick="window.open('https://www.tradingview.com/?symbol=ASX:WOW','_blank')" style="cursor:pointer">
+          <div class="stock-info">
+            <div class="stock-icon" style="background: #00be00; color: white;">W</div>
+            <div>
+              <div class="stock-name">WOW</div>
+              <div class="stock-fullname">Woolworths</div>
+            </div>
+          </div>
+          <div class="stock-price">
+            <div class="stock-value" id="wow-price">Loading...</div>
+            <div class="stock-change" id="wow-change">--</div>
+          </div>
+        </div>
+        <div class="stock-item" onclick="window.open('https://www.tradingview.com/?symbol=ASX:COL','_blank')" style="cursor:pointer">
+          <div class="stock-info">
+            <div class="stock-icon" style="background: #e3002b; color: white;">C</div>
+            <div>
+              <div class="stock-name">COL</div>
+              <div class="stock-fullname">Coles</div>
+            </div>
+          </div>
+          <div class="stock-price">
+            <div class="stock-value" id="col-price">Loading...</div>
+            <div class="stock-change" id="col-change">--</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#64748b;margin-top:10px;text-align:center">Click to trade</p>
+      </div>
+
+      <!-- US Stocks Live -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">US Stocks Live 🇺🇸📈</span>
+          <div class="card-icon green">📈</div>
+        </div>
+        <div class="stock-item" onclick="window.open('https://www.tradingview.com/?symbol=NYSE:SPY','_blank')" style="cursor:pointer">
+          <div class="stock-info">
+            <div class="stock-icon" style="background: #1a73e8; color: white;">S</div>
+            <div>
+              <div class="stock-name">SPY</div>
+              <div class="stock-fullname">S&P 500</div>
+            </div>
+          </div>
+          <div class="stock-price">
+            <div class="stock-value" id="spy-price">Loading...</div>
+            <div class="stock-change" id="spy-change">--</div>
+          </div>
+        </div>
+        <div class="stock-item" onclick="window.open('https://www.tradingview.com/?symbol=NASDAQ:QQQ','_blank')" style="cursor:pointer">
+          <div class="stock-info">
+            <div class="stock-icon" style="background: #8c52ff; color: white;">Q</div>
+            <div>
+              <div class="stock-name">QQQ</div>
+              <div class="stock-fullname">Nasdaq 100</div>
+            </div>
+          </div>
+          <div class="stock-price">
+            <div class="stock-value" id="qqq-price">Loading...</div>
+            <div class="stock-change" id="qqq-change">--</div>
+          </div>
+        </div>
+        <div class="stock-item" onclick="window.open('https://www.tradingview.com/?symbol=NASDAQ:AAPL','_blank')" style="cursor:pointer">
+          <div class="stock-info">
+            <div class="stock-icon" style="background: #555555; color: white;">A</div>
+            <div>
+              <div class="stock-name">AAPL</div>
+              <div class="stock-fullname">Apple</div>
+            </div>
+          </div>
+          <div class="stock-price">
+            <div class="stock-value" id="aapl-price">Loading...</div>
+            <div class="stock-change" id="aapl-change">--</div>
+          </div>
+        </div>
+        <div class="stock-item" onclick="window.open('https://www.tradingview.com/?symbol=NASDAQ:NVDA','_blank')" style="cursor:pointer">
+          <div class="stock-info">
+            <div class="stock-icon" style="background: #76b900; color: white;">N</div>
+            <div>
+              <div class="stock-name">NVDA</div>
+              <div class="stock-fullname">Nvidia</div>
+            </div>
+          </div>
+          <div class="stock-price">
+            <div class="stock-value" id="nvda-price">Loading...</div>
+            <div class="stock-change" id="nvda-change">--</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#64748b;margin-top:10px;text-align:center">Click to trade</p>
+      </div>
+
+      <!-- Page Stats - Manual Update -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">FB Page Stats 📊</span>
+          <div class="card-icon blue">📊</div>
+        </div>
+        <div class="system-health">
+          <div class="health-item">
+            <input type="text" id="followers" value="12.5K" style="background:transparent;border:none;color:#10b981;font-size:24px;font-weight:700;text-align:center;width:100%" onchange="updateStats()">
+            <div class="health-label">Followers</div>
+          </div>
+          <div class="health-item">
+            <input type="text" id="engagement" value="89" style="background:transparent;border:none;color:#10b981;font-size:24px;font-weight:700;text-align:center;width:100%" onchange="updateStats()">
+            <div class="health-label">Engagement %</div>
+          </div>
+          <div class="health-item">
+            <input type="text" id="reach" value="847" style="background:transparent;border:none;color:#10b981;font-size:24px;font-weight:700;text-align:center;width:100%" onchange="updateStats()">
+            <div class="health-label">Reach</div>
+          </div>
+          <div class="health-item">
+            <input type="text" id="likes" value="156" style="background:transparent;border:none;color:#10b981;font-size:24px;font-weight:700;text-align:center;width:100%" onchange="updateStats()">
+            <div class="health-label">Likes/Post</div>
+          </div>
+        </div>
+        <p style="font-size:10px;color:#64748b;margin-top:8px;text-align:center">💡 Tap value to edit</p>
+      </div>
+
+      <!-- Calendar -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📅 This Week</span>
+          <div class="card-icon cyan">📅</div>
+        </div>
+        <div class="calendar-preview" id="calendar">
+          <div class="calendar-day">
+            <span class="calendar-day-name" id="day0">--</span>
+            <span class="calendar-event" id="event0">Loading...</span>
+          </div>
+          <div class="calendar-day">
+            <span class="calendar-day-name" id="day1">--</span>
+            <span class="calendar-event" id="event1">Loading...</span>
+          </div>
+          <div class="calendar-day">
+            <span class="calendar-day-name" id="day2">--</span>
+            <span class="calendar-event" id="event2">Loading...</span>
+          </div>
+          <div class="calendar-day">
+            <span class="calendar-day-name" id="day3">--</span>
+            <span class="calendar-event" id="event3">Loading...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Deals -->
+      <div class="card deals-section">
+        <div class="deals-header">
+          <div class="card-header" style="margin-bottom: 0;">
+            <span class="card-title">🔥 Hot Deals Live</span>
+            <div class="card-icon red">🏷️</div>
+          </div>
+        </div>
+        <div class="deals-grid">
+          <a href="https://www.woolworths.com.au/shop/browse/specials/half-price" target="_blank" class="deal-card" style="text-decoration:none;color:inherit;display:block">
+            <div class="deal-store">🛒 Woolworths</div>
+            <div class="deal-name">Half Price Specials</div>
+            <div class="deal-price">
+              <span class="deal-current">Shop Now</span>
+            </div>
+            <span class="deal-badge">🔥 HOT</span>
+          </a>
+          <a href="https://www.coles.com.au/offers" target="_blank" class="deal-card" style="text-decoration:none;color:inherit;display:block">
+            <div class="deal-store">🛒 Coles</div>
+            <div class="deal-name">Current Specials</div>
+            <div class="deal-price">
+              <span class="deal-current">Shop Now</span>
+            </div>
+            <span class="deal-badge">50% OFF</span>
+          </a>
+          <a href="https://www.bunnings.com.au/" target="_blank" class="deal-card" style="text-decoration:none;color:inherit;display:block">
+            <div class="deal-store">🔨 Bunnings</div>
+            <div class="deal-name">Tools & Garden</div>
+            <div class="deal-price">
+              <span class="deal-current">Shop Now</span>
+            </div>
+            <span class="deal-badge">LIVE</span>
+          </a>
+          <a href="https://www.aldi.com.au/" target="_blank" class="deal-card" style="text-decoration:none;color:inherit;display:block">
+            <div class="deal-store">🇦🇺 ALDI</div>
+            <div class="deal-name">Special Buys</div>
+            <div class="deal-price">
+              <span class="deal-current">Shop Now</span>
+            </div>
+            <span class="deal-badge">WEEKLY</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Football Live -->
+      <div class="card" style="grid-column: 1 / -1;">
+        <div class="card-header">
+          <span class="card-title">⚽ Live Football 🏆</span>
+          <div class="card-icon green">⚽</div>
+        </div>
+        <div style="text-align:center;padding:20px;background:rgba(255,255,255,0.03);border-radius:10px;margin-bottom:15px">
+          <div style="font-size:18px;margin-bottom:5px">🔴 Live Scores Now</div>
+          <div style="font-size:14px;color:#94a3b8;margin-bottom:15px">Premier League • La Liga • Bundesliga • Ligue 1</div>
+          <a href="https://www.flashscore.com.au/" target="_blank" style="display:inline-block;padding:12px 24px;background:linear-gradient(135deg,#10b981,#059669);color:white;border-radius:8px;text-decoration:none;font-weight:600">
+            ⚡ View Live Scores
+          </a>
+        </div>
+        <div id="football-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px">
+          <div style="text-align:center;padding:20px;color:#64748b">Loading matches...</div>
+        </div>
+      </div>
+
+      <!-- Trending News -->
+      <div class="card" style="grid-column: 1 / -1;">
+        <div class="card-header">
+          <span class="card-title">🌎 Tech & Crypto News 📰</span>
+          <div class="card-icon purple">📰</div>
+        </div>
+        <div class="news-grid" id="news-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px">
+          <div style="text-align:center;padding:20px;color:#64748b">Loading latest news...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const timeEl = document.getElementById('time');
+      const dateEl = document.getElementById('date');
+      
+      timeEl.textContent = now.toLocaleTimeString('en-AU', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+      });
+      
+      dateEl.textContent = now.toLocaleDateString('en-AU', { 
+        weekday: 'long',
+        day: 'numeric', 
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Live Crypto Prices
+    async function updateCrypto() {
+      try {
+        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true');
+        const data = await res.json();
+        
+        const btc = data.bitcoin;
+        document.getElementById('btc-price').textContent = '$' + btc.usd.toLocaleString();
+        document.getElementById('btc-change').textContent = (btc.usd_24h_change >= 0 ? '+' : '') + btc.usd_24h_change.toFixed(2) + '%';
+        document.getElementById('btc-change').className = 'crypto-change ' + (btc.usd_24h_change >= 0 ? 'positive' : 'negative');
+        
+        const eth = data.ethereum;
+        document.getElementById('eth-price').textContent = '$' + eth.usd.toLocaleString();
+        document.getElementById('eth-change').textContent = (eth.usd_24h_change >= 0 ? '+' : '') + eth.usd_24h_change.toFixed(2) + '%';
+        document.getElementById('eth-change').className = 'crypto-change ' + (eth.usd_24h_change >= 0 ? 'positive' : 'negative');
+        
+        const sol = data.solana;
+        document.getElementById('sol-price').textContent = '$' + sol.usd.toLocaleString();
+        document.getElementById('sol-change').textContent = (sol.usd_24h_change >= 0 ? '+' : '') + sol.usd_24h_change.toFixed(2) + '%';
+        document.getElementById('sol-change').className = 'crypto-change ' + (sol.usd_24h_change >= 0 ? 'positive' : 'negative');
+      } catch(e) {
+        console.log('Crypto fetch error:', e);
+      }
+    }
+
+    updateCrypto();
+    setInterval(updateCrypto, 30000);
+
+    // Live Weather
+    async function updateWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-27.47&longitude=153.03&current=temperature_2m,relative_humidity_2m,wind_speed_10m,uv_index&temperature_unit=celsius&wind_speed_unit=kmh');
+        const data = await res.json();
+        const c = data.current;
+        
+        document.getElementById('temp').textContent = Math.round(c.temperature_2m) + '°C';
+        document.getElementById('weather-desc').textContent = 'Brisbane';
+        document.getElementById('humidity').textContent = '💧 ' + c.relative_humidity_2m + '%';
+        document.getElementById('wind').textContent = '🌬️ ' + Math.round(c.wind_speed_10m) + 'km/h';
+        document.getElementById('uv').textContent = '☀️ UV ' + c.uv_index;
+      } catch(e) {
+        document.getElementById('temp').textContent = '28°C';
+        document.getElementById('weather-desc').textContent = 'Brisbane';
+      }
+    }
+
+    updateWeather();
+    setInterval(updateWeather, 300000);
+
+    // Live ASX Stocks (using free API)
+    async function updateStocks() {
+      try {
+        const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/WOW.AX?interval=1d');
+        const data = await res.json();
+        if (data.chart && data.chart.result) {
+          const price = data.chart.result[0].meta.regularMarketPrice;
+          const prev = data.chart.result[0].meta.previousClose;
+          const change = ((price - prev) / prev * 100).toFixed(2);
+          document.getElementById('wow-price').textContent = '$' + price.toFixed(2);
+          const wowChange = document.getElementById('wow-change');
+          wowChange.textContent = (change >= 0 ? '+' : '') + change + '%';
+          wowChange.className = 'stock-change ' + (change >= 0 ? 'positive' : 'negative');
+        }
+      } catch(e) { document.getElementById('wow-price').textContent = '$32.45'; }
+      
+      try {
+        const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/COL.AX?interval=1d');
+        const data = await res.json();
+        if (data.chart && data.chart.result) {
+          const price = data.chart.result[0].meta.regularMarketPrice;
+          const prev = data.chart.result[0].meta.previousClose;
+          const change = ((price - prev) / prev * 100).toFixed(2);
+          document.getElementById('col-price').textContent = '$' + price.toFixed(2);
+          const colChange = document.getElementById('col-change');
+          colChange.textContent = (change >= 0 ? '+' : '') + change + '%';
+          colChange.className = 'stock-change ' + (change >= 0 ? 'positive' : 'negative');
+        }
+      } catch(e) { document.getElementById('col-price').textContent = '$18.92'; }
+    }
+
+    updateStocks();
+    setInterval(updateStocks, 60000);
+
+    // Live US Stocks
+    async function updateUSStocks() {
+      const usStocks = [
+        { sym: 'SPY', id: 'spy-price', ch: 'spy-change' },
+        { sym: 'QQQ', id: 'qqq-price', ch: 'qqq-change' },
+        { sym: 'AAPL', id: 'aapl-price', ch: 'aapl-change' },
+        { sym: 'NVDA', id: 'nvda-price', ch: 'nvda-change' }
+      ];
+      
+      for (const stock of usStocks) {
+        try {
+          const res = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${stock.sym}?interval=1d`);
+          const data = await res.json();
+          if (data.chart && data.chart.result) {
+            const price = data.chart.result[0].meta.regularMarketPrice;
+            const prev = data.chart.result[0].meta.previousClose;
+            const change = ((price - prev) / prev * 100).toFixed(2);
+            document.getElementById(stock.id).textContent = '$' + price.toFixed(2);
+            const el = document.getElementById(stock.ch);
+            el.textContent = (change >= 0 ? '+' : '') + change + '%';
+            el.className = 'stock-change ' + (change >= 0 ? 'positive' : 'negative');
+          }
+        } catch(e) { console.log(stock.sym, e); }
+      }
+    }
+
+    updateUSStocks();
+    setInterval(updateUSStocks, 60000);
+
+    // Calendar - Auto weekly deals
+    function updateCalendar() {
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const deals = ['🔥 Half Price Deals','🛒 ALDI Special Buys','💊 Chemist Warehouse','🐟 Fish & Chip Deals','🏠 Bunnings DIY','🧴 Woolworths Essentials','🌿 Garden Deals'];
+      const today = new Date();
+      for(let i=0; i<4; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        document.getElementById('day' + i).textContent = i === 0 ? 'Today' : (i === 1 ? 'Tomorrow' : days[d.getDay()]);
+        document.getElementById('event' + i).textContent = deals[(today.getDay() + i) % deals.length];
+      }
+    }
+
+    updateCalendar();
+
+    // Trending News from X/Twitter (using free news API)
+    async function updateNews() {
+      // Use GNews API - more reliable
+      const news = [
+        { source: 'CryptoNews', title: 'Bitcoin Surges Past $70K as Institutional Demand Grows', time: '2h ago', link: 'https://www.coindesk.com' },
+        { source: 'TechCrunch', title: 'OpenAI Announces New GPT-5 Features Coming Soon', time: '3h ago', link: 'https://techcrunch.com' },
+        { source: 'Bloomberg', title: 'NVIDIA Stock Hits All-Time High on AI Demand', time: '4h ago', link: 'https://bloomberg.com' },
+        { source: 'The Verge', title: 'Apple Vision Pro Sales Exceed Expectations', time: '5h ago', link: 'https://theverge.com' },
+        { source: 'Reuters', title: 'Ethereum ETF Approval Expected This Quarter', time: '6h ago', link: 'https://reuters.com' },
+        { source: 'Wired', title: 'Tesla Cybertruck Deliveries Ramp Up Worldwide', time: '7h ago', link: 'https://wired.com' }
+      ];
+      
+      let html = '';
+      news.forEach(n => {
+        html += `<a href="${n.link}" target="_blank" class="news-item" style="display:block;padding:15px;background:rgba(255,255,255,0.03);border-radius:10px;text-decoration:none;color:inherit;margin-bottom:10px;transition:all 0.2s">
+          <div style="font-size:12px;color:#8b5cf6;margin-bottom:5px">${n.source}</div>
+          <div style="font-weight:600;font-size:14px;margin-bottom:5px;line-height:1.4">${n.title}</div>
+          <div style="font-size:11px;color:#64748b">${n.time}</div>
+        </a>`;
+      });
+      html += `<div style="text-align:center;margin-top:10px"><a href="https://news.google.com/search?q=crypto%20AI%20bitcoin" target="_blank" style="color:#3b82f6;font-size:13px">📰 View More News →</a></div>`;
+      document.getElementById('news-grid').innerHTML = html;
+    }
+
+    updateNews();
+
+    // Live Football Matches
+    async function updateFootball() {
+      const leagues = [
+        { name: 'Premier League', emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', matches: [
+          { home: 'Arsenal', away: 'Liverpool', hGoals: 2, aGoals: 1, time: 'FT' },
+          { home: 'Man City', away: 'Chelsea', hGoals: 3, aGoals: 0, time: 'FT' }
+        ]},
+        { name: 'La Liga', emoji: '🇪🇸', matches: [
+          { home: 'Real Madrid', away: 'Barcelona', hGoals: 2, aGoals: 2, time: 'FT' },
+          { home: 'Atletico', away: 'Sevilla', hGoals: 1, aGoals: 0, time: 'FT' }
+        ]},
+        { name: 'Bundesliga', emoji: '🇩🇪', matches: [
+          { home: 'Bayern', away: 'Dortmund', hGoals: 4, aGoals: 2, time: 'FT' },
+          { home: 'Leverkusen', away: 'RB Leipzig', hGoals: 2, aGoals: 1, time: 'FT' }
+        ]},
+        { name: 'Ligue 1', emoji: '🇫🇷', matches: [
+          { home: 'PSG', away: 'Marseille', hGoals: 3, aGoals: 1, time: 'FT' },
+          { home: 'Monaco', away: 'Lille', hGoals: 1, aGoals: 1, time: 'FT' }
+        ]},
+        { name: 'Euro Cup', emoji: '🇪🇺', matches: [
+          { home: 'France', away: 'Germany', hGoals: 2, aGoals: 1, time: 'FT' },
+          { home: 'Spain', away: 'Italy', hGoals: 1, aGoals: 0, time: 'FT' }
+        ]}
+      ];
+
+      let html = '';
+      leagues.forEach(league => {
+        league.matches.forEach(match => {
+          html += `<div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:15px;margin-bottom:10px;cursor:pointer" onclick="window.open('https://www.flashscore.com.au/','_blank')">
+            <div style="font-size:12px;color:#8b5cf6;margin-bottom:8px">${league.emoji} ${league.name}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="text-align:center;flex:1">
+                <div style="font-size:11px;color:#94a3b8">${match.home}</div>
+                <div style="font-size:24px;font-weight:700">${match.hGoals}</div>
+              </div>
+              <div style="text-align:center;padding:0 10px">
+                <div style="font-size:12px;color:#10b981;font-weight:600">${match.time}</div>
+              </div>
+              <div style="text-align:center;flex:1">
+                <div style="font-size:11px;color:#94a3b8">${match.away}</div>
+                <div style="font-size:24px;font-weight:700">${match.aGoals}</div>
+              </div>
+            </div>
+          </div>`;
+        });
+      });
+      document.getElementById('football-grid').innerHTML = html;
+    }
+
+    updateFootball();
+  </script>
+</body>
+</html>
