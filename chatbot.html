@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        #chatbot-toggle:hover { transform: scale(1.1); }
+        
+        #chatbot-toggle svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+        
+        #chatbot-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 380px;
+            height: 500px;
+            background: #0d0d1a;
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid #2d2d44;
+            z-index: 1000;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            padding: 20px;
+            color: white;
+        }
+        
+        .chat-header h3 { font-size: 18px; margin-bottom: 5px; }
+        .chat-header p { font-size: 12px; opacity: 0.8; }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .bot-message {
+            background: #1c1c2e;
+            color: #f1f5f9;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .quick-reply {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 1px solid #8b5cf6;
+            transition: all 0.2s;
+        }
+        
+        .quick-reply:hover {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .chat-input {
+            padding: 15px;
+            background: #161625;
+            border-top: 1px solid #2d2d44;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            background: #0d0d1a;
+            border: 1px solid #2d2d44;
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .chat-input input:focus {
+            border-color: #8b5cf6;
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-input button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: #1c1c2e;
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        @media (max-width: 420px) {
+            #chatbot-window {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat Toggle Button -->
+    <div id="chatbot-toggle" onclick="toggleChat()">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    </div>
+    
+    <!-- Chat Window -->
+    <div id="chatbot-window">
+        <div class="chat-header">
+            <h3>🤖 AI Assistant</h3>
+            <p>We're here to help 24/7</p>
+        </div>
+        
+        <div class="chat-messages" id="messages">
+            <div class="message bot-message">
+                👋 Hi there! Welcome to [BUSINESS NAME]!
+                
+                <div class="quick-replies">
+                    <span class="quick-reply" onclick="sendMessage('Hours')">🕐 Hours</span>
+                    <span class="quick-reply" onclick="sendMessage('Services')">💼 Services</span>
+                    <span class="quick-reply" onclick="sendMessage('Contact')">📞 Contact</span>
+                    <span class="quick-reply" onclick="sendMessage('Quote')">💬 Get Quote</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typing">
+            <span></span><span></span><span></span>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendUserMessage()">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURE YOUR BUSINESS HERE =====
+        const businessConfig = {
+            name: "Your Business Name",
+            hours: "Mon-Fri: 9am-5pm, Sat: 9am-12pm",
+            phone: "07 4125 5528",
+            email: "hello@business.com",
+            address: "123 Main Street, Hervey Bay",
+            services: ["Web Design", "Marketing", "Consulting", "AI Solutions"],
+            // Add more Q&A pairs below
+            faqs: {
+                "what do you do": "We offer web design, marketing, and AI solutions for local businesses.",
+                "how much": "Pricing varies based on your needs. Get a free quote by clicking 'Get Quote'!",
+                "where are you located": "We're based in Hervey Bay, Queensland",
+                "do you come to me": "Yes! We service Hervey Bay and surrounding areas",
+                "what payment do you accept": "We accept bank transfer, credit card, and Afterpay"
+            }
+        };
+        // =========================================
+        
+        let chatOpen = false;
+        
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chatbot-window').style.display = chatOpen ? 'flex' : 'none';
+        }
+        
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendUserMessage();
+        }
+        
+        function sendMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = text;
+            messagesDiv.appendChild(userMsg);
+            
+            // Show typing indicator
+            document.getElementById('typing').style.display = 'block';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Simulate AI delay
+            setTimeout(() => {
+                document.getElementById('typing').style.display = 'none';
+                getAIResponse(text);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 1000);
+        }
+        
+        function sendUserMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (text) {
+                sendMessage(text);
+                input.value = '';
+            }
+        }
+        
+        function getAIResponse(userText) {
+            const messagesDiv = document.getElementById('messages');
+            const lowerText = userText.toLowerCase();
+            let response = "";
+            let quickReplies = null;
+            
+            // Match FAQs
+            for (const [key, value] of Object.entries(businessConfig.faqs)) {
+                if (lowerText.includes(key)) {
+                    response = value;
+                    break;
+                }
+            }
+            
+            // Default responses based on keywords
+            if (!response) {
+                if (lowerText.includes('hour') || lowerText.includes('open') || lowerText.includes('time')) {
+                    response = `🕐 Our hours are: ${businessConfig.hours}`;
+                } else if (lowerText.includes('contact') || lowerText.includes('call') || lowerText.includes('phone')) {
+                    response = `📞 Call us: ${businessConfig.phone}\n📧 Email: ${businessConfig.email}\n📍 ${businessConfig.address}`;
+                } else if (lowerText.includes('service') || lowerText.includes('offer') || lowerText.includes('do you')) {
+                    response = `💼 We offer: ${businessConfig.services.join(', ')}`;
+                } else if (lowerText.includes('quote') || lowerText.includes('price') || lowerText.includes('cost') || lowerText.includes('how much')) {
+                    response = `💰 We'd love to give you a quote! \n\nFill in your details and we'll get back to you within 24 hours.\n\nOr call us directly: ${businessConfig.phone}`;
+                    quickReplies = ["Get Quote", "Speak to Person"];
+                } else if (lowerText.includes('thank')) {
+                    response = "😊 You're welcome! Anything else we can help with?";
+                } else {
+                    response = "🤔 I'm not sure I understand. Would you like to speak to a team member?";
+                    quickReplies = ["Speak to Person", "Get Quote"];
+                }
+            }
+            
+            // Add bot response
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot-message';
+            botMsg.innerHTML = response;
+            
+            if (quickReplies) {
+                const qrDiv = document.createElement('div');
+                qrDiv.className = 'quick-replies';
+                quickReplies.forEach(qr => {
+                    const span = document.createElement('span');
+                    span.className = 'quick-reply';
+                    span.textContent = qr;
+                    span.onclick = () => sendMessage(qr);
+                    qrDiv.appendChild(span);
+                });
+                botMsg.appendChild(qrDiv);
+            }
+            
+            messagesDiv.appendChild(botMsg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
