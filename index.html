@@ -253,9 +253,9 @@
             
             // Hours
             if (msg.includes('hour') || msg.includes('open') || msg.includes('time')) {
-                return `🕐 We're open **${info.hours}**! 
+                return `🕐 We're open **6:30am - Midnight, 7 days a week**! 
 <br><br>
-<a href="tel:${info.phone}">📞 Call: ${info.phone}</a>
+<a href="tel:07 4125 5528">📞 Call: 07 4125 5528</a>
 <br><br>
 Come in anytime — we'd love to see you! ☀️`;
             }
@@ -263,12 +263,12 @@ Come in anytime — we'd love to see you! ☀️`;
             // Location
             if (msg.includes('location') || msg.includes('address') || msg.includes('where')) {
                 return `📍 **Aqua Vue**
-<br>${info.address}
+<br>415A Esplanade, Torquay, Hervey Bay QLD 4655
 <br><br>
 🌊 Beachfront location — stunning views!
 <br><br>
 <a href="https://maps.google.com/?q=Aqua+Vue+Hervey+Bay" target="_blank" style="background:#00a8e8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px 0;">📍 Open in Maps</a>
-<a href="tel:${info.phone}" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px 0;">📞 Call</a>`;
+<a href="tel:07 4125 5528" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px 0;">📞 Call</a>`;
             }
             
             // Menu
@@ -281,16 +281,16 @@ Come in anytime — we'd love to see you! ☀️`;
 <br>• Flat White — $4.50
 <br>• Fresh juices — $6.00
 <br><br>
-<a href="${info.website}" target="_blank">View full menu</a>`;
+<a href="https://www.aquavue.com.au" target="_blank">View full menu</a>`;
             }
             
             // Booking
             if (msg.includes('book') || msg.includes('reservation') || msg.includes('table')) {
                 return `📅 Book a table now! 🌊
 <br><br>
-<a href="${info.booking}" target="_blank" style="background:#00a8e8;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin:10px 0;">📅 Book Now on Website</a>
+<a href="https://www.aquavue.com.au/reservations" target="_blank" style="background:#00a8e8;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin:10px 0;">📅 Book Now on Website</a>
 <br><br>
-Or call us on **${info.phone}**
+Or call us on **07 4125 5528**
 <br><br>
 How many people would you like to book for?`;
             }
@@ -322,11 +322,11 @@ Want one? Come on in! 🐋`;
             if (msg.includes('contact') || msg.includes('phone') || msg.includes('call')) {
                 return `📞 Contact Us
 <br><br>
-<a href="tel:${info.phone}" style="background:#00a8e8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">📞 ${info.phone}</a>
+<a href="tel:07 4125 5528" style="background:#00a8e8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">📞 07 4125 5528</a>
 <br><br>
 <a href="mailto:team@aquavue.com.au" style="background:#007ea7;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">📧 Email Us</a>
 <br><br>
-<a href="${info.website}" target="_blank" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">🌐 Visit Website</a>`;
+<a href="https://www.aquavue.com.au" target="_blank" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">🌐 Visit Website</a>`;
             }
             
             // Prices/cost
@@ -337,7 +337,7 @@ Want one? Come on in! 🐋`;
 <br>• Fresh juices from $6.00
 <br>• Smoothies — $7.50
 <br><br>
-Check our <a href="${info.website}" target="_blank">full menu</a> for everything!`;
+Check our <a href="https://www.aquavue.com.au" target="_blank">full menu</a> for everything!`;
             }
             
             // Parking
