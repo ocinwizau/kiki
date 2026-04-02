@@ -242,7 +242,8 @@
             address: "415A Esplanade, Torquay, Hervey Bay QLD 4655",
             phone: "07 4125 5528",
             hours: "6:30am - Midnight, 7 days a week",
-            website: "https://www.aquavue.com.au"
+            website: "https://www.aquavue.com.au",
+            booking: "https://www.aquavue.com.au/reservations"
         };
         
         // Smart response logic
@@ -252,15 +253,21 @@
             // Hours
             if (msg.includes('hour') || msg.includes('open') || msg.includes('time')) {
                 return `🕐 We're open **${info.hours}**! 
-                
+<br><br>
+<a href="tel:${info.phone}">📞 Call: ${info.phone}</a>
+<br><br>
 Come in anytime — we'd love to see you! ☀️`;
             }
             
             // Location
             if (msg.includes('location') || msg.includes('address') || msg.includes('where')) {
-                return `📍 We're at **${info.address}** — right on the beachfront with stunning ocean views! 🌊
-
-<a href="https://maps.google.com/?q=Aqua+Vue+Hervey+Bay" target="_blank">Open in Maps</a> | <a href="tel:${info.phone}">Call us</a>`;
+                return `📍 **Aqua Vue**
+<br>${info.address}
+<br><br>
+🌊 Beachfront location — stunning views!
+<br><br>
+<a href="https://maps.google.com/?q=Aqua+Vue+Hervey+Bay" target="_blank" style="background:#00a8e8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px 0;">📍 Open in Maps</a>
+<a href="tel:${info.phone}" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px 0;">📞 Call</a>`;
             }
             
             // Menu
@@ -278,11 +285,13 @@ Come in anytime — we'd love to see you! ☀️`;
             
             // Booking
             if (msg.includes('book') || msg.includes('reservation') || msg.includes('table')) {
-                return `📅 Great choice! 🌊
+                return `📅 Book a table now! 🌊
 <br><br>
-Call us on **${info.phone}** to book — or we can take your details here!
+<a href="${info.booking}" target="_blank" style="background:#00a8e8;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin:10px 0;">📅 Book Now on Website</a>
 <br><br>
-How many people?`;
+Or call us on **${info.phone}**
+<br><br>
+How many people would you like to book for?`;
             }
             
             // Vegan/vegetarian
@@ -310,9 +319,13 @@ Want one? Come on in! 🐋`;
             
             // Contact
             if (msg.includes('contact') || msg.includes('phone') || msg.includes('call')) {
-                return `📞 **${info.phone}**
-<br>📧 team@aquavue.com.au
-<br>🌐 ${info.website}`;
+                return `📞 Contact Us
+<br><br>
+<a href="tel:${info.phone}" style="background:#00a8e8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">📞 ${info.phone}</a>
+<br><br>
+<a href="mailto:team@aquavue.com.au" style="background:#007ea7;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">📧 Email Us</a>
+<br><br>
+<a href="${info.website}" target="_blank" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">🌐 Visit Website</a>`;
             }
             
             // Prices/cost
