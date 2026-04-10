@@ -1,0 +1,16 @@
+node_modules/
+.vercel/
+.openclaw/
+*.png
+*.js
+package*.json
+deploy/
+channels/
+Daily_Deals_*.md
+Daily_*.md
+aquavue-ai-chatbot.html
+chatlocal-landing*.html
+IDENTITY.md
+Aqua_*.md
+Chatbot_*.md
+
