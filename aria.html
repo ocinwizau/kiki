@@ -96,12 +96,12 @@
   </div>
   <div class="chat" id="chat"></div>
   <div class="quick-wrap">
-    <button class="qr" onclick="showBilling()">💳 Bulk Billing</button>
-    <button class="qr" onclick="showBooking()">📅 Book Appointment</button>
-    <button class="qr" onclick="showHours()">🕐 Hours</button>
-    <button class="qr" onclick="showServices()">🩺 Services</button>
-    <button class="qr" onclick="quick('Are you accepting new patients?')">👤 New Patient</button>
-    <button class="qr" onclick="showHuman()">📞 Call Reception</button>
+    <button class="qr" onclick="showBilling()">💳 Do you bulk bill?</button>
+    <button class="qr" onclick="showBooking()">📅 How do I book?</button>
+    <button class="qr" onclick="showHours()">🕐 What are your hours?</button>
+    <button class="qr" onclick="showServices()">🩺 What services do you offer?</button>
+    <button class="qr" onclick="quick('Are you accepting new patients?')">👤 Taking new patients?</button>
+    <button class="qr" onclick="showHuman()">📞 Talk to reception</button>
   </div>
   <div class="input-row">
     <textarea id="msg" placeholder="Ask Aria anything..." rows="1" onkeydown="handleKey(event)" oninput="resize(this)"></textarea>
@@ -327,7 +327,7 @@ function resize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.sc
 
 window.onload = () => {
   setTimeout(() => {
-    addMsg('ai', "Hi there! Welcome to Primary Care Medical Clinic 😊\n\nI'm Aria — I can help with bulk billing, appointments, our services, and opening hours.\n\nHow can I help you today?");
+    addMsg('ai', "Hi! I'm Aria 👋 I'm the AI receptionist for Primary Care Medical Clinic.\n\nI can instantly answer questions about bulk billing, booking appointments, our doctors and services — any time of day.\n\nTap a question below or just type what you need 😊");
   }, 400);
 };
 </script>
